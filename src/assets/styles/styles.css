@@ -27,6 +27,12 @@ ul {
     list-style: none;
 }
 
+.error-message {
+    color: #ff0000;
+    font-size: 16px;
+    text-align: left;
+}
+
 
 /* ========================================= */
 /* Register page styles */
