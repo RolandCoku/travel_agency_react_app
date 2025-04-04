@@ -1,58 +1,88 @@
-import React, { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import LogoContainer from "../../components/LogoContainer/LogoContainer";
+import { LoginData } from "../../types/auth";
+import LogoContainer from "../../components/LogoContainer";
+import LoadingSpiner from "../../components/LoadingSpiner";
+import BackgroundImage from "../../components/BackgroundImage";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { login, error: authError } = useAuth();
+  const [formData, setFormData] = useState<LoginData>({
+    email: "",
+    password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const { login, error: authError, loading } = useAuth();
   const navigate = useNavigate();
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     try {
-      await login(email, password);
+      await login(formData);
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
+      setFormData((prevData) => ({
+        ...prevData,
+        password: "",
+      }));
     }
   }
 
   return (
     <div className="login-page">
+      <BackgroundImage />
       <LogoContainer />
       <main className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <h1 className="form-title">Login</h1>
           {authError && <div className="error-message">{authError}</div>}
+          <label htmlFor="email">Email:</label>
           <div className="input-group">
-            <label htmlFor="email">Email:</label>
             <input
               type="email"
               name="email"
               id="email"
               placeholder="example@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
               required
             />
             <i className="bx bxs-user" aria-hidden="true"></i>
           </div>
+          <label htmlFor="password">Password:</label>
           <div className="input-group">
-            <label htmlFor="password">Password:</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               id="password"
               placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
               required
             />
-            <i className="bx bxs-lock-alt" aria-hidden="true"></i>
+            <i
+              className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ cursor: "pointer" }}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  setShowPassword(!showPassword);
+                }
+              }}
+            />
           </div>
           <div className="form-options">
             <label className="remember-me">
@@ -60,8 +90,20 @@ export default function Login() {
             </label>
             <Link to="/forgot-password">Forgot Password?</Link>
           </div>
-          <button type="submit" className="btn-primary">
-            Login
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? (
+              <span className="loading-text">Logging in...</span>
+            ) : (
+              <span className="login-text">Login</span>
+            )}
+            {loading && (
+              <LoadingSpiner
+                color="#fff"
+                width="20px"
+                height="20px"
+                borderWidth="3px"
+              />
+            )}
           </button>
           <div className="register-link">
             <p>

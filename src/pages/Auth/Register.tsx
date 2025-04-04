@@ -1,31 +1,55 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import LogoContainer from "../../components/LogoContainer/LogoContainer";
+import {ChangeEvent, useState, useEffect, FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import LogoContainer from "../../components/LogoContainer";
+import { useAuth } from "../../hooks/useAuth";
+import { RegisterData } from "../../types/auth";
+import BackgroundImage from "../../components/BackgroundImage";
 
 export default function Register() {
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [formData, setFormData] = useState<RegisterData>({
+        name: "",
+        surname: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+    const { register, error: authError, loading, clearError } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
+    useEffect(() => {
+        clearError();
+    }, []);
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        // Add validation if needed
-        if (password !== confirmPassword) {
+        if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match.");
             return;
         }
-        // Handle registration logic here (API call, etc.)
-        console.log("Registering:", { name, surname, email, password });
+        try {
+            await register(formData);
+            navigate("/login");
+        } catch (error) {
+            console.error("Registration error:", error);
+        }
     };
 
     return (
         <div className="register-page">
+            <BackgroundImage />
             <LogoContainer />
             <main className="register-container">
                 <form onSubmit={handleSubmit} className="register-form">
                     <h1 className="form-title">Register</h1>
+                    {authError && <div className="error-message">{authError}</div>}
                     <div className="input-group">
                         <label htmlFor="name">Name:</label>
                         <input
@@ -33,8 +57,8 @@ export default function Register() {
                             name="name"
                             id="name"
                             placeholder="john"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={formData.name}
+                            onChange={handleChange}
                             required
                         />
                         <i className="bx bxs-user" aria-hidden="true"></i>
@@ -46,8 +70,8 @@ export default function Register() {
                             name="surname"
                             id="surname"
                             placeholder="doe"
-                            value={surname}
-                            onChange={(e) => setSurname(e.target.value)}
+                            value={formData.surname}
+                            onChange={handleChange}
                             required
                         />
                         <i className="bx bxs-user" aria-hidden="true"></i>
@@ -59,8 +83,8 @@ export default function Register() {
                             name="email"
                             id="email"
                             placeholder="johndoe@gmail.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={formData.email}
+                            onChange={handleChange}
                             required
                         />
                         <i className="bx bxs-envelope" aria-hidden="true"></i>
@@ -72,27 +96,27 @@ export default function Register() {
                             name="password"
                             id="password"
                             placeholder="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={formData.password}
+                            onChange={handleChange}
                             required
                         />
                         <i className="bx bxs-lock-alt" aria-hidden="true"></i>
                     </div>
                     <div className="input-group">
-                        <label htmlFor="confirm_password">Confirm Password:</label>
+                        <label htmlFor="confirmPassword">Confirm Password:</label>
                         <input
                             type="password"
-                            name="confirm_password"
-                            id="confirm_password"
+                            name="confirmPassword"
+                            id="confirmPassword"
                             placeholder="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
                             required
                         />
                         <i className="bx bxs-lock" aria-hidden="true"></i>
                     </div>
-                    <button type="submit" className="btn-primary">
-                        Register
+                    <button type="submit" className="btn-primary" disabled={loading}>
+                        {loading ? "Registering..." : "Register"}
                     </button>
                     <div className="login-link">
                         <p>
