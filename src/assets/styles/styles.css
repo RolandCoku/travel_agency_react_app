@@ -1,3 +1,8 @@
+@import "../../components/header/header.css";
+@import "../../components/LoadingSpinner/LoadingSpinner.css";
+@import "../../components/LogoContainer/LogoContainer.css";
+@import "../../components/MainSlider/MainSlider.css";
+
 /*
 ========================================
 GLOBAL STYLES
@@ -33,180 +38,11 @@ ul {
     text-align: left;
 }
 
-/* 
+/*
 ***************************************************************************************
 COMPONENT STYLES
 ***************************************************************************************
 */
-
-/* 
-=======================================================================================
-NAVBAR STYLES 
-=======================================================================================
-*/
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background: rgba(212, 233, 255, 0.7);
-    border-radius: 0 0 20px 20px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1rem;
-    margin: 0 auto;
-}
-
-.navbar .logo img {
-    height: 50px;
-    object-fit: contain;
-}
-
-.navbar .search-bar {
-    flex: 1;
-    margin: 0 2rem;
-    max-width: 400px;
-    position: relative;
-}
-
-.navbar .search-bar input {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    border: none;
-    border-radius: 25px;
-    outline: none;
-    font-size: 0.9rem;
-    background-color: rgba(104, 178, 255, 0.2);
-    backdrop-filter: blur(4px);
-    transition: box-shadow 0.3s ease;
-}
-
-.navbar .search-bar input:focus {
-    box-shadow: 0 0 5px 2px rgba(0, 91, 255, 0.2);
-}
-
-.nav-links {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-}
-
-.nav-links a {
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.5rem 0.8rem;
-    color: #2891ff;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: #005bff;
-}
-
-.user-actions {
-    display: flex;
-    gap: 1rem;
-}
-
-/*
-=============================================================================== 
-LOGO CONTAINER STYLES 
-===============================================================================
-*/
-.logo-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    width: 100%;
-    max-width: 450px;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-.image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo-container img {
-    display: inline-block;
-    max-height: 90px;
-    opacity: 0;
-    will-change: transform, opacity;
-}
-
-.logo-container img:first-of-type {
-    animation: slideInLogo1 0.5s ease-in-out forwards;
-    animation-delay: 0.1s;
-}
-
-.logo-container img:last-of-type {
-    animation: slideInLogo2 0.5s ease-in-out forwards;
-    animation-delay: 0.2s;
-}
-
-@keyframes slideInLogo1 {
-    from {
-        transform: translateX(-30px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideInLogo2 {
-    from {
-        transform: translateX(30px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* 
-=======================================================================================
-LOADING SPINNER STYLES
-=======================================================================================
-*/
-.loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.loading-spinner .spinner {
-    border-style: solid;
-    border-radius: 50%;
-}
-
-.loading-spinner .spinner {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 
 
 /* ========================================= */
@@ -225,7 +61,7 @@ LOADING SPINNER STYLES
 }
 
 .register-page {
-    position: relative;
+    background: url('../images/login-background.webp') no-repeat center center/cover;
     color: #2891ff;
     display: flex;
     flex-direction: column;
@@ -235,6 +71,7 @@ LOADING SPINNER STYLES
     min-height: 100vh;
     padding: 0 20px;
     overflow: hidden;
+    position: relative;
 }
 
 .register-page::before {
@@ -369,10 +206,9 @@ LOADING SPINNER STYLES
 }
 
 
-/* Keyframes for logo animations */
 /* Login page styles */
 .login-page {
-    position: relative;
+    background: url('../images/login-background.jpg') no-repeat center center/cover;
     color: #2891ff;
     display: flex;
     flex-direction: column;
@@ -382,6 +218,7 @@ LOADING SPINNER STYLES
     min-height: 100vh;
     padding: 0 20px;
     overflow: hidden;
+    position: relative;
 }
 
 .login-page::before {
@@ -614,20 +451,31 @@ LOADING SPINNER STYLES
 }
 
 .background-image {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    will-change: opacity;
-    z-index: 0;
+    display: none;
 }
 
 .background-image.loaded {
-    opacity: 1;
+    display: none;
+}
+
+.login-form .input-group, .register-form .input-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form .input-group .icon, .register-form .input-group .icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: #2891ff;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.login-form .input-group input:focus + .icon,
+.register-form .input-group input:focus + .icon {
+    color: #005bff;
 }

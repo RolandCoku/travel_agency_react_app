@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useState} from "react";
+import {createContext, ReactNode, useCallback, useState} from "react";
 import {login as authServiceLogin, register as authServiceRegister} from "../services/AuthService.tsx";
 import {User, RegisterData, LoginData} from "../types/auth";
 
@@ -7,9 +7,9 @@ interface AuthContextType {
     login: (data: LoginData) => Promise<void>;
     register: (data: RegisterData) => Promise<void>;
     logout: () => void;
+    clearError: () => void;
     error: string | null;
     loading: boolean;
-    clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,9 +17,9 @@ const AuthContext = createContext<AuthContextType>({
     login: async () => {},
     register: async () => {},
     logout: () => {},
-    error: null,
-    loading: false,
     clearError: () => {},
+    error: null,
+    loading: false
 });
 
 export const AuthProvider = ({children}: {children : ReactNode} ) => {
@@ -27,56 +27,56 @@ export const AuthProvider = ({children}: {children : ReactNode} ) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const clearError = () => {
+    const clearError = useCallback(() => {
         setError(null);
-    };
+    }, [])
 
     const login = async (data: LoginData) => {
         setLoading(true);
-        const response = await authServiceLogin(data);
         try {
-            const data = await response.json();
+            const response = await authServiceLogin(data);
+            const responseData = await response.json();
+            
             if(response.ok){
-                setUser(data);
+                setUser(responseData);
                 setError(null);
-                setLoading(false);
             } else {
+                setError(responseData.message || 'Login failed');
                 setLoading(false);
-                setUser(null);
-                setError(data.message || 'Login failed');
-                throw new Error(data.message || 'Login failed');
+                return;
             }
         } catch (error) {
-            setLoading(false);
-            setUser(null);
             setError(error instanceof Error ? error.message : 'An unexpected error occurred');
-            throw error;
+            setLoading(false);
+            return;
+        } finally {
+            setLoading(false);
         }
     };
 
     const register = async (data: RegisterData) => {
         setLoading(true);
-        const response = await authServiceRegister(data);
         try {
+            const response = await authServiceRegister(data);
             const responseData = await response.json();
+            
             if(response.ok){
                 setError(null);
-                setLoading(false);
             } else {
-                setLoading(false);
                 setError(responseData.message || 'Registration failed');
-                throw new Error(responseData.message || 'Registration failed');
+                setLoading(false);
+                return;
             }
         } catch (error) {
-            setLoading(false);
             setError(error instanceof Error ? error.message : 'An unexpected error occurred');
-            throw error;
+            setLoading(false);
+            return;
+        } finally {
+            setLoading(false);
         }
     };
 
     const logout = () => {
-        // Call your API here
-        console.log("Logging out");
         setUser(null);
     };
 

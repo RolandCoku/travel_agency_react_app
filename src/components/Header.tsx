@@ -1,5 +1,5 @@
 import {NavLink, Link} from 'react-router-dom'
-import logo from '../assets/images/full-logo.png'
+import logo from '../assets/images/full-logo.webp'
 
 export default function Header() {
     return (

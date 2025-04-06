@@ -1,9 +1,9 @@
-import {ChangeEvent, useState, useEffect, FormEvent } from "react";
+import {ChangeEvent, useState, FormEvent, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LogoContainer from "../../components/LogoContainer";
 import { useAuth } from "../../hooks/useAuth";
 import { RegisterData } from "../../types/auth";
-import BackgroundImage from "../../components/BackgroundImage";
+import {FaUser, FaEnvelope, FaEyeSlash, FaEye} from "react-icons/fa";
 
 export default function Register() {
     const [formData, setFormData] = useState<RegisterData>({
@@ -13,12 +13,20 @@ export default function Register() {
         password: "",
         confirmPassword: ""
     });
-    const { register, error: authError, loading, clearError } = useAuth();
+    const { register, error: authError, loading, user, clearError } = useAuth();
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     useEffect(() => {
         clearError();
-    }, []);
+    }, [clearError]);
+
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -44,14 +52,13 @@ export default function Register() {
 
     return (
         <div className="register-page">
-            <BackgroundImage />
             <LogoContainer />
             <main className="register-container">
                 <form onSubmit={handleSubmit} className="register-form">
                     <h1 className="form-title">Register</h1>
                     {authError && <div className="error-message">{authError}</div>}
+                    <label htmlFor="name">Name:</label>
                     <div className="input-group">
-                        <label htmlFor="name">Name:</label>
                         <input
                             type="text"
                             name="name"
@@ -61,10 +68,10 @@ export default function Register() {
                             onChange={handleChange}
                             required
                         />
-                        <i className="bx bxs-user" aria-hidden="true"></i>
+                        <FaUser className="icon" aria-hidden="true" />
                     </div>
+                    <label htmlFor="surname">Surname:</label>
                     <div className="input-group">
-                        <label htmlFor="surname">Surname:</label>
                         <input
                             type="text"
                             name="surname"
@@ -74,10 +81,10 @@ export default function Register() {
                             onChange={handleChange}
                             required
                         />
-                        <i className="bx bxs-user" aria-hidden="true"></i>
+                        <FaUser className="icon" aria-hidden="true" />
                     </div>
+                    <label htmlFor="email">Email:</label>
                     <div className="input-group">
-                        <label htmlFor="email">Email:</label>
                         <input
                             type="email"
                             name="email"
@@ -87,12 +94,12 @@ export default function Register() {
                             onChange={handleChange}
                             required
                         />
-                        <i className="bx bxs-envelope" aria-hidden="true"></i>
+                        <FaEnvelope className="icon" aria-hidden="true" />
                     </div>
+                    <label htmlFor="password">Password:</label>
                     <div className="input-group">
-                        <label htmlFor="password">Password:</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             id="password"
                             placeholder="password"
@@ -100,12 +107,30 @@ export default function Register() {
                             onChange={handleChange}
                             required
                         />
-                        <i className="bx bxs-lock-alt" aria-hidden="true"></i>
+                        {showPassword ? (
+                            <FaEyeSlash
+                                className="icon"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{cursor: "pointer"}}
+                                aria-label="Hide password"
+                                role="button"
+                                tabIndex={0}
+                            />
+                        ) : (
+                            <FaEye
+                                className="icon"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{cursor: "pointer"}}
+                                aria-label="Show password"
+                                role="button"
+                                tabIndex={0}
+                            />
+                        )}
                     </div>
+                    <label htmlFor="confirmPassword">Confirm Password:</label>
                     <div className="input-group">
-                        <label htmlFor="confirmPassword">Confirm Password:</label>
                         <input
-                            type="password"
+                            type={showConfirmPassword ? "text" : "password"}
                             name="confirmPassword"
                             id="confirmPassword"
                             placeholder="password"
@@ -113,7 +138,25 @@ export default function Register() {
                             onChange={handleChange}
                             required
                         />
-                        <i className="bx bxs-lock" aria-hidden="true"></i>
+                        {showConfirmPassword ? (
+                            <FaEyeSlash
+                                className="icon"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                style={{cursor: "pointer"}}
+                                aria-label="Hide password"
+                                role="button"
+                                tabIndex={0}
+                            />
+                        ) : (
+                            <FaEye
+                                className="icon"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                style={{cursor: "pointer"}}
+                                aria-label="Show password"
+                                role="button"
+                                tabIndex={0}
+                            />
+                        )}
                     </div>
                     <button type="submit" className="btn-primary" disabled={loading}>
                         {loading ? "Registering..." : "Register"}
