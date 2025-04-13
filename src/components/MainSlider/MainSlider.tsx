@@ -34,7 +34,7 @@ export default function MainSlider() {
                 modules={[Pagination, Navigation]}
                 pagination={{ clickable: true }}
                 navigation={true}
-                loop={true}
+                loop={false}
                 className="myHeroSwiper"
             >
                 {slides.map((slide, index) => (

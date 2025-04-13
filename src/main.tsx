@@ -1,10 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import './assets/styles/styles.css'    // ← Vite will bundle this
+import './assets/styles/output.css'
+import {HashRouter} from "react-router-dom";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+      <HashRouter>
+          <App />
+      </HashRouter>
   </StrictMode>,
 )

@@ -1,14 +1,23 @@
-@import "../../components/header/header.css";
+/*
+***************************************************************************************
+COMPONENT STYLES
+***************************************************************************************
+*/
+@import "../../components/Navbar/Navbar.css";
 @import "../../components/LoadingSpinner/LoadingSpinner.css";
 @import "../../components/LogoContainer/LogoContainer.css";
 @import "../../components/MainSlider/MainSlider.css";
+@import "../../components/Searchbar/Searchbar.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /*
 ========================================
 GLOBAL STYLES
 ========================================
 */
-
 * {
     margin: 0;
     padding: 0;
@@ -38,13 +47,6 @@ ul {
     text-align: left;
 }
 
-/*
-***************************************************************************************
-COMPONENT STYLES
-***************************************************************************************
-*/
-
-
 /* ========================================= */
 /* Register page styles */
 .register-container {
@@ -58,20 +60,6 @@ COMPONENT STYLES
     box-shadow: 0 10px 30px rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(10px);
     animation: fadeIn 1s ease-in-out;
-}
-
-.register-page {
-    background: url('../images/login-background.webp') no-repeat center center/cover;
-    color: #2891ff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    min-height: 100vh;
-    padding: 0 20px;
-    overflow: hidden;
-    position: relative;
 }
 
 .register-page::before {
@@ -89,7 +77,7 @@ COMPONENT STYLES
 .register-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
 }
 
 .register-form .form-title {
@@ -207,7 +195,7 @@ COMPONENT STYLES
 
 
 /* Login page styles */
-.login-page {
+.login-page, .register-page{
     background: url('../images/login-background.jpg') no-repeat center center/cover;
     color: #2891ff;
     display: flex;
@@ -249,7 +237,7 @@ COMPONENT STYLES
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .login-form .form-title {

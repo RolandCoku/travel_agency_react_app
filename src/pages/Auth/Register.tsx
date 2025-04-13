@@ -1,6 +1,6 @@
 import {ChangeEvent, useState, FormEvent, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import LogoContainer from "../../components/LogoContainer";
+import LogoContainer from "../../components/LogoContainer/LogoContainer.tsx";
 import { useAuth } from "../../hooks/useAuth";
 import { RegisterData } from "../../types/auth";
 import {FaUser, FaEnvelope, FaEyeSlash, FaEye} from "react-icons/fa";

@@ -2,8 +2,8 @@ import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../../hooks/useAuth";
 import {LoginData} from "../../types/auth";
-import LogoContainer from "../../components/LogoContainer";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LogoContainer from "../../components/LogoContainer/LogoContainer.tsx";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner.tsx";
 import {FaUser, FaEye, FaEyeSlash} from "react-icons/fa";
 
 export default function Login() {
